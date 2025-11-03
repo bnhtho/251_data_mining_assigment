@@ -1,5 +1,7 @@
 # 🧠 Data Mining Workflow with scikit-learn
 Dự án này thiết lập môi trường và quy trình cơ bản cho khai phá dữ liệu (Data Mining) bằng thư viện **scikit-learn**, phục vụ cho học tập và thực hành các thuật toán học máy.  
+## Mục tiêu
+**Mục tiêu bài toán:** Dự đoán xem khách hàng có happy (hài lòng) dựa trên trải nghiệm mua hàng của họ.
 ## ⚙️ Cài đặt môi trường
 Tạo và kích hoạt môi trường ảo:
 ```bash
@@ -16,7 +18,8 @@ pip3 install -U scikit-learn pandas numpy matplotlib seaborn
 data-mining-workflow/
 ├── data/        # Dữ liệu
 ├── src/         # Mã nguồn Python
-├── models/      # Mô hình (tuỳ chọn)
+├── models/      # Mô hình
+├── output/      # Đầu ra sau khi làm sạch và chọn các cột
 └── README.md # Mô tả
 ```
 
