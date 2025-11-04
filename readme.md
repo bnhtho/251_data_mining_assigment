@@ -10,9 +10,9 @@ source sklearn-env/bin/activate  # activate
 pip install -U scikit-learn
 # Cài phần mềm
 # Các thư viện cần thiết sau khi kích hoạt vào sklearn-env
-```bash
-pip3 install -U scikit-learn pandas numpy matplotlib seaborn
 
+pip3 install -U scikit-learn pandas numpy matplotlib seaborn
+```
 ## Cấu trúc dự án
 ```bash
 data-mining-workflow/
