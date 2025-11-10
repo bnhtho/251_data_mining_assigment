@@ -82,11 +82,14 @@ merged_data = pd.concat([merged_data.drop(columns=["season"]), season_df], axis=
 median_happy = int(round(merged_data["is_happy_customer"].median(skipna=True)))
 merged_data["is_happy_customer"] = merged_data["is_happy_customer"].fillna(median_happy)
 merged_data["is_happy_customer"] = merged_data["is_happy_customer"].astype(int)
-# Kiểm tra NA sau xử lý
-print("\nNA sau khi xử lý:")
-print(merged_data.isna().sum())
 
+# 3.4 Updated : Điền NA cho cột distance_to_nearest_warehouse
+# # Dùng mean cho toàn cột
 
+mean_distance = merged_data["distance_to_nearest_warehouse"].mean()
+merged_data["distance_to_nearest_warehouse"] = merged_data["distance_to_nearest_warehouse"].fillna(mean_distance)
+print("Tỷ lệ NA sau khi điền:",
+      merged_data["distance_to_nearest_warehouse"].isna().mean())
 ##################################################
 # 5. Xử lý ngoại lai (IQR)
 ##################################################
@@ -105,7 +108,16 @@ merged_data["order_price"] = iqr_adjust(merged_data["order_price"])
 merged_data["is_expedited_delivery"] = merged_data["is_expedited_delivery"].astype(int)
 
 print("\nHoàn tất xử lý dữ liệu!")
+#NOTE: Sau khi làm sạch 
+print(merged_data[['delivery_charges','coupon_discount','is_expedited_delivery',
+                   'order_price','order_total','distance_to_nearest_warehouse',
+                   'season_spring','season_autumn','season_summer','season_winter',
+                   'is_happy_customer']].isna().sum())
 
+columns=['delivery_charges','coupon_discount','is_expedited_delivery',
+         'order_price','order_total','distance_to_nearest_warehouse',
+         'season_spring','season_autumn','season_summer','season_winter',
+         'is_happy_customer']
 
 # Lưu file kết quả và xuất ra các columns yêu cầu
-merged_data.to_excel("data/ds_final.xlsx", index=False,columns=['delivery_charges','coupon_discount','is_expedited_delivery','distance_to_nearest_warehouse','order_price','order_total','season_spring','season_autumn','season_summer','season_winter','is_happy_customer'])
+merged_data.to_excel("data/ds_final.xlsx", index=False,columns=columns)
