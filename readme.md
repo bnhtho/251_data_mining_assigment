@@ -8,22 +8,31 @@ Tạo và kích hoạt môi trường ảo:
 python -m venv sklearn-env # macos/linux
 source sklearn-env/bin/activate  # activate
 pip install -U scikit-learn
-# Cài phần mềm
+# Cài phần mềm trong môi trường sk-learn
 # Các thư viện cần thiết sau khi kích hoạt vào sklearn-env
 
-pip3 install -U scikit-learn pandas numpy matplotlib seaborn
+pip3 install -U scikit-learn pandas numpy matplotlib seaborn jupyter get_ipython
 ```
 ## Cấu trúc dự án
 ```bash
 data-mining-workflow/
 ├── data/        # Dữ liệu
-├── src/         # Mã nguồn Python
+├── SourceImage # Ảnh sau khi train model
+├── src/  # Nơi chứa mã nguồn Python
+├──── cleaning.py         # Script làm sạch dữ liệu
+├──── model_experiment.py # Model
 ├── models/      # Mô hình
 ├── output/      # Đầu ra sau khi làm sạch và chọn các cột
-└── README.md # Mô tả
+└── README.md # Mô tả dự án
+
 ```
-
-
+## Convert notebook sang Python
+<!-- Sources -->
+```bash
+cd src/
+jupyter nbconvert --to python model_experiment.ipynb
+python3 model_experiment.py
+```
 ## Kiểm tra cài đặt
 ```bash
 python -c "import sklearn; sklearn.show_versions()"
