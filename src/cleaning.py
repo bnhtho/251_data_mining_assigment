@@ -10,7 +10,8 @@ import pandas as pd
 from datetime import datetime
 from sklearn.preprocessing import OneHotEncoder
 import numpy as np
-
+import matplotlib.pyplot as plt
+import seaborn as sns
 ##################################################
 # 2. Tiền xử lý & Ghép dữ liệu
 ##################################################
@@ -59,15 +60,15 @@ month_value = merged_data["date"].dt.month
 merged_data.loc[merged_data["season"].isin(["nan", "none", "na"]), "season"] = np.nan  # chuẩn hóa NA
 
 merged_data["season"] = np.where(merged_data["season"].notna(), merged_data["season"],
-                                 np.select(
-                                     [
-                                         month_value.isin([12, 1, 2]),
-                                         month_value.isin([3, 4, 5]),
-                                         month_value.isin([6, 7, 8])
-                                     ],
-                                     ["winter", "spring", "summer"],
-                                     default="spring"
-                                 ))
+np.select(
+                                    [
+            month_value.isin([12, 1, 2]),
+            month_value.isin([3, 4, 5]),
+            month_value.isin([6, 7, 8]),
+            month_value.isin([9, 10, 11])
+        ],
+        ["winter", "spring", "summer", "autumn"],
+        default="spring"))
 
 # OneHotEncoder cho cột season
 encoder = OneHotEncoder(sparse_output=False)
@@ -90,6 +91,7 @@ mean_distance = merged_data["distance_to_nearest_warehouse"].mean()
 merged_data["distance_to_nearest_warehouse"] = merged_data["distance_to_nearest_warehouse"].fillna(mean_distance)
 print("Tỷ lệ NA sau khi điền:",
       merged_data["distance_to_nearest_warehouse"].isna().mean())
+
 ##################################################
 # 5. Xử lý ngoại lai (IQR)
 ##################################################
@@ -101,9 +103,36 @@ def iqr_adjust(series):
     upper = Q3 + 1.5 * IQR
     return np.clip(series, lower, upper)
 
+# Xử lý IQR cho các cột numeric
 merged_data["order_total"] = iqr_adjust(merged_data["order_total"])
 merged_data["order_price"] = iqr_adjust(merged_data["order_price"])
 
+# Chuyển cột bool sang dạng số
+merged_data["is_expedited_delivery"] = merged_data["is_expedited_delivery"].astype(int)
+
+# ============================
+# Xuất ảnh sau khi xử lý IQR
+# ============================
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Các cột số muốn minh họa
+cols = ["order_total", "order_price"]
+
+plt.figure(figsize=(10, 5))
+sns.boxplot(data=merged_data[cols], palette="pastel")
+plt.title("Sau khi xử lý ngoại lai (IQR)")
+plt.xlabel("Biến số")
+plt.ylabel("Giá trị")
+plt.tight_layout()
+
+# Lưu ảnh
+plt.savefig("data/after_iqr_boxplot.png", dpi=300)
+plt.show()
+
+print("\nHoàn tất xử lý dữ liệu và xuất ảnh sau IQR!")
+
+# IQR: Xử lý sau khi dùng tứ phân vị
 # bool sang dạng số
 merged_data["is_expedited_delivery"] = merged_data["is_expedited_delivery"].astype(int)
 
